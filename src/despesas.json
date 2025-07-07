@@ -1,0 +1,46 @@
+{
+    "despesas": [
+        {
+            "id": 1,
+            "description": "Aluguel",
+            "amount": 900.00,
+            "startdate": "31/07/2025",
+            "periodic": "Mensal"
+        },
+        {
+            "id": 2,
+            "description": "Internet",
+            "amount": 99.00,
+            "startdate": "31/07/2025",
+            "periodic": "Mensal"
+        },
+        {
+            "id": 3,
+            "description": "Água",
+            "amount": 90.00,
+            "startdate": "31/07/2025",
+            "periodic": "Mensal"
+        },
+        {
+            "id": 4,
+            "description": "Energia",
+            "amount": 120.00,
+            "startdate": "31/07/2025",
+            "periodic": "Mensal"
+        },
+                {
+            "id": 5,
+            "description": "Mercado",
+            "amount": 500.00,
+            "startdate": "31/07/2025",
+            "periodic": "Mensal"
+        },
+                {
+            "id": 6,
+            "description": "Outros",
+            "amount": 250.00,
+            "startdate": "31/07/2025",
+            "periodic": "Mensal"
+        }
+    ]
+}

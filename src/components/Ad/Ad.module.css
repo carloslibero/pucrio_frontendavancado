@@ -1,0 +1,17 @@
+.ad {
+    width: 100%;
+    height: 100px;
+    background-color: #bd59ff;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    color: whitesmoke;
+    padding-top: 68px;
+}
+
+.ad h2 {
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    padding-top: 1.125rem;
+}

@@ -1,0 +1,25 @@
+{
+    "receitas": [
+        {
+            "id": 1,
+            "description": "Salário",
+            "amount": 5000.00,
+            "startdate": "31/07/2025",
+            "periodic": "Mensal"
+        },
+        {
+            "id": 2,
+            "description": "13o 1a Parcela",
+            "amount": 2500.00,
+            "startdate": "31/07/2025",
+            "periodic": "Anual"
+        },
+        {
+            "id": 3,
+            "description": "PLR",
+            "amount": 2000.00,
+            "startdate": "31/07/2025",
+            "periodic": "Nenhuma"
+        }
+    ]
+}

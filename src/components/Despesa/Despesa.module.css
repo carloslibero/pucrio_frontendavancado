@@ -1,0 +1,8 @@
+.despesas {
+    background-color: rgb(233, 146, 146)
+}
+
+.despesas th {
+    background-color: rgb(233, 146, 146);
+    font-weight: bold;
+}

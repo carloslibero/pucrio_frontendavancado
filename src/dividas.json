@@ -1,0 +1,24 @@
+{
+    "dividas": [
+        {
+            "id": 1,
+            "description": "Compra de Carro",
+            "category": "Veículos",
+            "initialamount": 50000.00,
+            "finalamount": 80000.00,
+            "startdate": "01/07/2025",
+            "enddate": "31/12/2028",
+            "completed": false
+        },
+        {
+            "id": 2,
+            "description": "Empréstimo Pessoal",
+            "category": "Empréstimos",
+            "initialamount": 1000.00,
+            "finalamount": 1500.00,
+            "startdate": "01/08/2025",
+            "enddate": "31/12/2025",
+            "completed": false
+        }
+    ]
+}
