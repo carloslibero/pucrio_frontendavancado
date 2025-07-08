@@ -12,9 +12,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-// Data import - usando o json com os dados para exibir na tabela
-import dividas from '../../dividas.json';
-
 //Setagem dos parametros da tabela conforme exemplo do Material UI component https://mui.com/material-ui/react-table/
 const columns = [
   { id: 'desc', label: 'Descrição', minWidth: 100, align: 'left' },
@@ -40,21 +37,29 @@ export default function Divida() {
         setPage(0);
     };
 
-        //Lendo os valores para exibir na tabela
-        const [dividaList, setDividaList] = useState(dividas.dividas);
-        const rows = dividaList.map((divida) => ({
-            desc: divida.description,
-            cat: divida.category,
-            amountini: divida.initialamount,
-            amounntend: divida.finalamount,
-            dateini: divida.startdate,
-            dateend: divida.enddate,
-            done: divida.completed ? 'Sim' : 'Não',
-        }));
+//Lendo os valores para exibir na tabela
+const [dividaList, setDividaList] = useState([]);
 
+//Função para carregar os dados iniciais das Dividas
+const getDataFromStorage = () => {
+    try {
+        //Verifica as Dividas
+        const dividaData = localStorage.getItem('dividaData');
+        const z = dividaData !== null ? JSON.parse(dividaData) : [];
+        setDividaList(z);
+    } 
+    catch(error)
+    {
+        console.error("Erro ao obter dados do localStorage:", error);
+    }
+}
 
-  return (
-   <div className={styles.dividas}>
+useEffect(() => {
+    getDataFromStorage();
+}, []);
+
+    return (
+       <div className={styles.dividas}>
         <h2>Dividas</h2>
         <Paper>
         <TableContainer sx={{ maxHeight: 440 }}>
@@ -73,7 +78,7 @@ export default function Divida() {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {rows
+                {dividaList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                     return (
@@ -97,7 +102,7 @@ export default function Divida() {
         <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={dividaList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

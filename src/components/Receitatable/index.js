@@ -1,19 +1,17 @@
 import styles from './Receitatable.module.css';
-import { act, createContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 //Importando o DataTable do react-data-table-component para uso com edições e outros recursos
 // Disponível em https://www.npmjs.com/package/react-data-table-component
 import DataTable from 'react-data-table-component';
 
-// Data import - usando o json com os dados para exibir na tabela
-import receitas from '../../receitas.json';
+// Importa o ícone de deletar
 import { FaTrash } from 'react-icons/fa'; 
-import { selectClasses } from '@mui/material';
 
 export default function Receitatable() {
     const columnsReceita = [
         {
-            name: 'ID',
+            name: "ID",
             selector: row => row.id,
             sortable: true
         },
@@ -29,12 +27,12 @@ export default function Receitatable() {
         },
         {
             name: "Data de Início",
-            selector: row => row.startdate,
+            selector: row => row.date,
             sortable: true
         },
         {
             name: "Frequência",
-            selector: row => row.periodic,
+            selector: row => row.period,
             sortable: true
         },
         {
@@ -42,77 +40,100 @@ export default function Receitatable() {
             selector: row => row.actions,
         }
     ];
-    
-    const [receitasList, setReceitasList] = useState(receitas.receitas);
 
-    //Lendo os valores para exibir na tabela
-    const rows = receitasList.map((receitas) => ({
-        id: receitas.id,
-        desc: receitas.description,
-        amount: receitas.amount,
-        startdate: receitas.startdate,
-        periodic: receitas.periodic,
-    }));
+     //Lendo os valores para exibir na tabela
+    const [receitasList, setReceitasList] = useState([]);
+    const [originalData, setOriginalData] = useState([]);
+
+    //Função para carregar os dados iniciais das Receitas
+    const getDataFromStorage = () => {
+        try {
+            //Verifica as Receitas
+            const receitaData = localStorage.getItem('receitaData');
+            const z = receitaData !== null ? JSON.parse(receitaData) : [];
+            setReceitasList(z);
+            setOriginalData(z);
+        } 
+        catch(error)
+        {
+            console.error("Erro ao obter dados do localStorage:", error);
+        }
+    }
+
+useEffect(() => {
+    getDataFromStorage();
+}, []);
 
 //função para adicionar o botão de deletar na tabela
-function addDeleteButton(rows) {
+function addDeleteButton(receitasList) {
     return (
-        <button type='button' onClick={() => {handleDelete(rows.id)}}>
+        <button type='button' onClick={() => {handleDelete(receitasList.id)}}>
             <FaTrash />
         </button>
      );
 }
 
-rows.forEach(element => {
+receitasList.forEach(element => {
     element.actions = addDeleteButton(element);
-    const newRows = [...rows];
-    console.log(newRows);
 });
 
 //função para deletar uma receita
 function handleDelete(id) {
-    const newRows = rows.filter(rows => rows.id !== id);
-    console.log("Deletando receita com ID:", id);
+    const newRows = receitasList.filter(receitasList => receitasList.id !== id);
     setReceitasList(newRows);
-    //let updatedRows = rows.filter(row => row.id !== id);
-    console.log("Receitas após deleção:", rows);
+    setOriginalData(newRows);
 }
 
 //função para salvar uma nova receita
 function onSave(event) {
     event.preventDefault();
-    let newID = rows.length + 1; // Incrementa o ID baseado no tamanho atual do array
-    console.log(event.target.newdescription.value);
+    let newID = receitasList.length + 1; // Incrementa o ID baseado no tamanho atual do array
     let newReceitas = {
         id: newID,
         desc: event.target.newdescription.value,
         amount: parseFloat(event.target.newamount.value),   
-        startdate: event.target.newstartdate.value,
-        periodic: event.target.newperiodic.value,
+        date: new Date(event.target.newstartdate.value).toLocaleDateString('pt-BR'),
+        period: event.target.newperiodic.value,
     }
-    console.log("Adicionando nova receita:", newReceitas);
-    console.log(rows);
     setReceitasList([...receitasList,newReceitas]);
-    console.log(rows);
+    setOriginalData([...originalData,newReceitas]);
 }
+
+    //Função para filtar os dados na tabela Receita
+    function handleFilter(event) {
+        console.log("Original Data", originalData);
+        const filterData = receitasList.filter(row => {
+            return row.desc.toLowerCase().includes(event.target.value.toLowerCase())
+        });
+        setOriginalData((filterData));
+    }
 
     return (
         <div className={styles.receitaTable}>
             <form onSubmit={onSave}>
-                <label>Descrição: </label>
-                <input type="text" name="newdescription" placeholder="Descrição da receita" required="" />
-                <label>Valor: </label>
-                <input type="number" name="newamount" min="0.00" max="10000.00" step="0.01" placeholder="Valor da receita" required="" />
-                <label>Data de Início: </label>
-                <input type="date" name="newstartdate" required="Data da Receita" />
-                <label>Frequência: </label>
-                <input type="text" name="newperiodic" required="" />
+                <label>Descrição: 
+                    <input type="text" name="newdescription" placeholder="Descrição da receita" required="Favor informar a descrição" />
+                </label>
+                <label>Valor: 
+                    <input type="number" name="newamount" min="0.00" max="10000.00" step="0.01" placeholder="Valor da receita" required="Favor informar o valor" />
+                </label>
+                <label>Data de Início: 
+                    <input type="date" name="newstartdate" required="Data da Receita deve ser informada" />
+                </label>
+                <label>Frequência: 
+                    <input type="text" name="newperiodic" placeholder="Mensal" />
+                </label>
                 <button type="submit">Adicionar Receita</button>
             </form>
+            <div className={styles.buscar}>
+                <label>Buscar:
+                    <input type="text" id="buscar" placeholder="Descrição" onChange={handleFilter} />
+                </label>
+            </div>
             <DataTable
                 title="Receitas"
                 columns={columnsReceita}
-                data={rows}
+                data={originalData}
                 fixedHeader
                 pagination
                 highlightOnHover

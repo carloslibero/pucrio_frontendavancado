@@ -1,0 +1,15 @@
+.cotacoes {
+    background-color:azure;
+    border-bottom: 2x solid whitesmoke;
+    height: 34px;
+    width: 100%;
+    display: flex;
+    padding-block: 0.50rem;;
+    justify-content: left;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: lighter;
+    /*position: absolute;
+    align-items: center;
+    justify-content: space-around;*/
+}

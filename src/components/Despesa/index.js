@@ -12,9 +12,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-// Data import - usando o json com os dados para exibir na tabela
-import despesas from '../../despesas.json';
-
 //Setagem dos parametros da tabela conforme exemplo do Material UI component https://mui.com/material-ui/react-table/
 const columns = [
   { id: 'desc', label: 'Descrição', minWidth: 100, align: 'left' },
@@ -37,14 +34,26 @@ export default function Despesa() {
         setPage(0);
     };
 
-    //Lendo os valores para exibir na tabela
-    const [despesaList, setDespesaList] = useState(despesas.despesas);
-    const rows = despesaList.map((despesa) => ({
-        desc: despesa.description,
-        amount: despesa.amount,
-        date: despesa.startdate,
-        period: despesa.periodic,
-    }));
+//Lendo os valores para exibir na tabela
+const [despesaList, setDespesaList] = useState([]);
+
+//Função para carregar os dados iniciais das Desespas
+const getDataFromStorage = () => {
+    try {
+        //Verifica as Despesas
+        const despesaData = localStorage.getItem('despesaData');
+        const z = despesaData !== null ? JSON.parse(despesaData) : [];
+        setDespesaList(z);
+    } 
+    catch(error)
+    {
+        console.error("Erro ao obter dados do localStorage:", error);
+    }
+}
+
+useEffect(() => {
+    getDataFromStorage();
+}, []);
 
   return (
     <div className={styles.despesas}>
@@ -66,7 +75,7 @@ export default function Despesa() {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {rows
+                {despesaList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                     return (
@@ -90,7 +99,7 @@ export default function Despesa() {
         <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={despesaList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

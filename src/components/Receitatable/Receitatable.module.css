@@ -1,3 +1,27 @@
 .receitaTable tr:hover {
   background-color: greenyellow;
 }
+
+.receitaTable form {
+  padding: 0.25rem;
+  border: 2px solid aqua;
+  background-color: aqua;
+}
+
+.receitaTable label {
+  margin-left: 0.5rem;
+}
+
+.receitaTable input {
+  margin-left: 0.5rem;
+}
+
+.receitaTable button {
+  margin-left: 0.5rem;
+}
+
+.buscar {
+  text-align: right;
+  padding: 0.25rem;
+  background-color: aqua;
+}

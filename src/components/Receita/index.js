@@ -12,9 +12,6 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-// Data import - usando o json com os dados para exibir na tabela
-import receitas from '../../receitas.json';
-
 //Setagem dos parametros da tabela conforme exemplo do Material UI component https://mui.com/material-ui/react-table/
 const columns = [
   { id: 'desc', label: 'Descrição', minWidth: 100, align: 'left' },
@@ -37,14 +34,29 @@ export default function Receita() {
         setPage(0);
     };
 
-    //Lendo os valores para exibir na tabela
-    const [receitaList, setReceitaList] = useState(receitas.receitas);
-    const rows = receitaList.map((receita) => ({
-        desc: receita.description,
-        amount: receita.amount,
-        date: receita.startdate,
-        period: receita.periodic,
-    }));
+//Lendo os valores para exibir na tabela
+const [receitaList, setReceitaList] = useState([]);
+
+ //Função para carregar os dados iniciais das Receitas
+const getDataFromStorage = () => {
+    try {
+        //Verifica as Receitas
+        const receitaData = localStorage.getItem('receitaData');
+        console.log("Dados das Receitas obtidos do localStorage:", receitaData);
+        const z = receitaData !== null ? JSON.parse(receitaData) : [];
+        setReceitaList(z);
+        console.log("Lista de Receitas:", z);
+        console.log("Lista de Receitas:", receitaList);
+    } 
+    catch(error)
+    {
+        console.error("Erro ao obter dados do localStorage:", error);
+    }
+}
+
+useEffect(() => {
+    getDataFromStorage();
+}, []);
 
     return (
     <div className={styles.receitas}>
@@ -66,7 +78,7 @@ export default function Receita() {
                 </TableRow>
             </TableHead>
             <TableBody>
-                {rows
+                {receitaList
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                     return (
@@ -90,7 +102,7 @@ export default function Receita() {
         <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={receitaList.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
