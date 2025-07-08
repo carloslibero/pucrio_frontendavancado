@@ -82,6 +82,21 @@ function handleDelete(id) {
     const newRows = receitasList.filter(receitasList => receitasList.id !== id);
     setReceitasList(newRows);
     setOriginalData(newRows);
+
+    const rowsReceita = newRows.map((w) => ({
+        id: w.id,
+        desc: w.desc,
+        amount: w.amount,
+        date: w.date,
+        period: w.period,
+    }));
+
+    try {
+        localStorage.setItem("receitaData",JSON.stringify(rowsReceita));
+    }
+    catch (error) {
+        console.error("Erro ao atualizar as Receitas: ", error);
+    }
 }
 
 //função para salvar uma nova receita
@@ -97,6 +112,27 @@ function onSave(event) {
     }
     setReceitasList([...receitasList,newReceitas]);
     setOriginalData([...originalData,newReceitas]);
+
+    //Limpa os valores
+    event.target.newdescription.value = "";
+    event.target.newamount.value = "";
+    event.target.newstartdate.value = "";
+    event.target.newperiodic.value = "";
+
+    const rowsReceita = originalData.map((w) => ({
+        id: w.id,
+        desc: w.desc,
+        amount: w.amount,
+        date: w.date,
+        period: w.period,
+    }));
+
+    try {
+        localStorage.setItem("receitaData",JSON.stringify(rowsReceita));
+    }
+    catch (error) {
+        console.error("Erro ao atualizar as Receitas: ", error);
+    }
 }
 
     //Função para filtar os dados na tabela Receita
@@ -112,18 +148,28 @@ function onSave(event) {
         <div className={styles.receitaTable}>
             <form onSubmit={onSave}>
                 <label>Descrição: 
-                    <input type="text" name="newdescription" placeholder="Descrição da receita" required="Favor informar a descrição" />
+                    <span title="Informe a descrição da Receita">
+                        <input type="text" name="newdescription" placeholder="Descrição da receita" required="Favor informar a descrição" />
+                    </span>
                 </label>
                 <label>Valor: 
-                    <input type="number" name="newamount" min="0.00" max="10000.00" step="0.01" placeholder="Valor da receita" required="Favor informar o valor" />
+                    <span title="Informe o valor da receita">
+                        <input type="number" name="newamount" min="0.00" max="10000.00" step="0.01" placeholder="Valor da receita" required="Favor informar o valor" />
+                    </span>
                 </label>
                 <label>Data de Início: 
-                    <input type="date" name="newstartdate" required="Data da Receita deve ser informada" />
+                    <span title="Informe a data da Receita">
+                        <input type="date" name="newstartdate" required="Data da Receita deve ser informada" />
+                    </span>
                 </label>
                 <label>Frequência: 
-                    <input type="text" name="newperiodic" placeholder="Mensal" />
+                    <span title="Informe a frequência da Receita">
+                        <input type="text" name="newperiodic" placeholder="Mensal" />
+                    </span>
                 </label>
-                <button type="submit">Adicionar Receita</button>
+                <span title="Adiccionar uma nova receita">
+                    <button type="submit">Adicionar Receita</button>
+                </span>
             </form>
             <div className={styles.buscar}>
                 <label>Buscar:
